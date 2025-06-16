@@ -1,29 +1,18 @@
 "use client";
-import styled from "styled-components";
-import Image from "next/image";
 import MaskLogo from "@/src/maskbookLogo.png";
-import useSWR from "swr";
-import { Post } from "@/lib/generated/prisma";
-import { Spinner } from "@/app/_components/loading-spinner";
-import { formatDate } from "@/lib/utils";
-import { useParams } from "next/navigation";
 
-interface PostResponse {
-  ok: boolean;
-  postList: Post[];
+interface FrameProps {
+  children: React.ReactNode;
 }
 
-export default function PostDetail() {
-  const params = useParams();
-  const id = Number(params.id);
-
+export default function Frame({ children }: FrameProps) {
   return (
     <Wrap>
       <TopBar>
         <Logo src={MaskLogo} width={50} height={50} alt="Logo"></Logo>
         <SignIn>Sign In</SignIn>
       </TopBar>
-      <Main>{id}</Main>
+      <Main>{children}</Main>
     </Wrap>
   );
 }
