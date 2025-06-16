@@ -1,5 +1,6 @@
 "use client";
 import MaskLogo from "@/src/maskbookLogo.png";
+import Link from "next/link";
 
 interface FrameProps {
   children: React.ReactNode;
@@ -9,7 +10,9 @@ export default function Frame({ children }: FrameProps) {
   return (
     <Wrap>
       <TopBar>
-        <Logo src={MaskLogo} width={50} height={50} alt="Logo"></Logo>
+        <Logo src={MaskLogo} width={50} height={50} alt="Logo">
+          <Link href={"/"}></Link>
+        </Logo>
         <SignIn>Sign In</SignIn>
       </TopBar>
       <Main>{children}</Main>
