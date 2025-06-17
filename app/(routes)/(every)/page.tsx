@@ -1,13 +1,17 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
-import MaskLogo from "@/src/maskbookLogo.png";
-import SIcon from "@/src/searchIcon.png";
 import useSWR from "swr";
 import { Post } from "@/lib/generated/prisma";
 import { Spinner } from "@/app/_components/loading-spinner";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
+
+import MaskLogo from "@/src/maskbookLogo.png";
+import SIcon from "@/src/searchIcon.png";
+import PIcon from "@/src/postIcon.png";
+import AdImg from "@/src/ad.png";
+import Frame from "@/app/_components/frame";
 
 interface PostResponse {
   ok: boolean;
@@ -18,24 +22,23 @@ export default function Home() {
   const { data, error, isLoading } = useSWR<PostResponse>("/api/post");
 
   return (
-    <Wrap>
-      <TopBar>
-        <Logo src={MaskLogo} width={50} height={50} alt="Logo"></Logo>
-        <SignIn>Sign In</SignIn>
-      </TopBar>
+    <Frame>
       <Main>
         <SearchBox>
           <SearchIcon
             src={SIcon}
-            width={50}
-            height={50}
+            width={20}
+            height={20}
             alt="SearchIcon"
           ></SearchIcon>
           <SearchInput placeholder="키워드로 검색하세요."></SearchInput>
         </SearchBox>
         <LeftPanel>
           <PopularArea>
-            <PopularHeading>Popular Posts</PopularHeading>
+            <PopularHeading>
+              <PostIcon src={PIcon} width={20} height={20} alt="postIcon" />
+              <span>Popular Posts</span>
+            </PopularHeading>
             <PopularList>
               {isLoading && (
                 <SpinnerWrapper>
@@ -55,106 +58,127 @@ export default function Home() {
             </PopularList>
           </PopularArea>
         </LeftPanel>
-        <RightPanel></RightPanel>
+        <RightPanel>
+          <AdBanner src={AdImg} width={0} height={300} alt="AdImg" />
+        </RightPanel>
       </Main>
-    </Wrap>
+    </Frame>
   );
 }
 
-const Wrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100vw;
-  height: 100vh;
-`;
-
-const TopBar = styled.header`
-  flex-shrink: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 1rem 2rem;
-  background-color: #670d2f;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  z-index: 10;
-`;
-
-const Logo = styled(Image)``;
-
-const SignIn = styled.button`
-  background-color: #ef88ad;
-  color: #3a0519;
-  font-size: 1rem;
-  width: 6rem;
-  height: 2rem;
-  border-radius: 30px;
-  border: 0;
-`;
-
 const Main = styled.main`
-  flex-grow: 1;
+  flex: 1;
   width: 100%;
-  height: calc(100% - 3rem);
+  margin: 0 auto;
+  padding: 2rem;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 3fr;
-  gap: 1rem;
+  grid-template-areas:
+    "search search"
+    "left right";
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
 `;
 
 const SearchBox = styled.form`
-  grid-column: 1/3;
+  grid-area: search;
   justify-self: center;
+  margin: 1rem 0;
   width: 60%;
-  height: 2rem;
+  height: 3rem;
   background-color: #ffffff;
-  border: 2px solid black;
+  border: 2px solid #3a0519;
   border-radius: 30px;
-  /* margin-top: 7rem; */
+
   display: flex;
   align-items: center;
 `;
 
 const SearchIcon = styled(Image)`
   margin: 1rem;
+  display: table;
 `;
 
 const SearchInput = styled.input`
-  margin-right: 1rem;
+  /* margin-right: 1rem; */
+  padding: 0;
   width: 100%;
+  height: 100%;
   border: none;
   background: none;
+  color: #3a0519;
+  text-align: justify;
 
   &:focus {
-    border: none;
+    outline: none;
   }
 `;
 
-const LeftPanel = styled.div``;
+const LeftPanel = styled.div`
+  grid-area: left;
+`;
 
 const PopularArea = styled.div``;
 
-const PopularHeading = styled.h1``;
+const PopularHeading = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #3a0519;
 
-const PopularList = styled.li``;
+  span {
+    color: #3a0519;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+`;
 
-const ListRow = styled.li``;
+const PostIcon = styled(Image)``;
 
-const ListTitle = styled.li``;
+const PopularList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+`;
 
-const SpinnerWrapper = styled.li`
+const ListRow = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ListTitle = styled.span`
+  flex: 1;
+  color: #3a0519;
+`;
+
+const SpinnerWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
   margin-top: 3rem;
 `;
 
-const RightPanel = styled.div``;
-
 const SLink = styled(Link)`
   text-decoration: none;
+  color: #3a0519;
+  display: block;
+  padding: 1rem;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid #8c6372;
+
+  &:hover {
+    background-color: #fef2f5;
+    transform: translateX(4px);
+  }
 `;
+
+const RightPanel = styled.div`
+  grid-area: right;
+`;
+
+const AdBanner = styled(Image)``;
