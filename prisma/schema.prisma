@@ -20,7 +20,14 @@ model Post {
   title String @default("")
   content String @db.Text @default("")
   likedCount Int @default(0)
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
 
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  passwordHash String
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 }
