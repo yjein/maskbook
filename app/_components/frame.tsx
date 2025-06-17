@@ -2,6 +2,7 @@
 import MaskLogo from "@/src/maskbookLogo.png";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
 interface FrameProps {
@@ -9,13 +10,15 @@ interface FrameProps {
 }
 
 export default function Frame({ children }: FrameProps) {
+  const router = useRouter();
+
   return (
     <Wrap>
       <TopBar>
         <Link href={"/"}>
           <Logo src={MaskLogo} width={50} height={50} alt="Logo"></Logo>
         </Link>
-        <SignIn>Sign In</SignIn>
+        <SignIn onClick={() => router.push("/sign-up")}>Sign In</SignIn>
       </TopBar>
       {children}
     </Wrap>
